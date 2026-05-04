@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>متجر احترافي + تسجيل دخول</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #0f0f0f;
+            color: white;
+            margin: 0;
+            text-align: center;
+        }
+
+        header {
+            background-color: #1c1c1c;
+            padding: 20px;
+            font-size: 24px;
+        }
+
+        input {
+            padding: 10px;
+            margin: 10px;
+        }
+
+        button {
+            padding: 10px;
+            border: none;
+            background-color: cyan;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: #222;
+            padding: 15px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    🛒 متجر احترافي
+</header>
+
+<!-- LOGIN -->
+<div id="loginBox">
+    <h2>🔐 تسجيل الدخول</h2>
+    <input type="text" id="username" placeholder="دخل اسمك">
+    <button onclick="login()">دخول</button>
+</div>
+
+<!-- STORE -->
+<div id="store" class="hidden">
+
+    <h2 id="welcome"></h2>
+
+    <div id="cart">السلة: 0</div>
+
+    <div class="products">
+
+        <div class="card">
+            <h3>هاتف</h3>
+            <button onclick="add('هاتف')">شراء</button>
+        </div>
+
+        <div class="card">
+            <h3>سماعات</h3>
+            <button onclick="add('سماعات')">شراء</button>
+        </div>
+
+        <div class="card">
+            <h3>ساعة</h3>
+            <button onclick="add('ساعة')">شراء</button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let user = localStorage.getItem("user") || "";
+
+    function login() {
+        let name = document.getElementById("username").value;
+
+        if (name === "") {
+            alert("دخل اسمك");
+            return;
+        }
+
+        localStorage.setItem("user", name);
+        user = name;
+
+        showStore();
+    }
+
+    function showStore() {
+        document.getElementById("loginBox").classList.add("hidden");
+        document.getElementById("store").classList.remove("hidden");
+
+        document.getElementById("welcome").innerText = "مرحبا " + user + " 👋";
+
+        updateCart();
+    }
+
+    function add(product) {
+        cart.push(product);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        updateCart();
+    }
+
+    function updateCart() {
+        document.getElementById("cart").innerText =
+            "السلة: " + cart.length + " منتجات";
+    }
+
+    // auto login
+    if (user !== "") {
+        showStore();
+    }
+</script>
+
+</body>
+</html>
